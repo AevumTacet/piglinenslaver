@@ -1,6 +1,14 @@
 name: ThrallMaster
 version: 1.0.0
-description: Bring back a AbstractSkeleton and he will serve you till death.
+description: Bring back a Skeleton and he will serve you till death.
 author: Telwa
 main: com.thrallmaster.Main
-api-version: "1.21.4"
+api-version: "1.21"
+
+commands:
+  thrall:
+    description: Main command for ThrallMaster
+    usage: /<command> [subcommand]
+    aliases: [tm]
+    permission: thrall.use
+    permission-message: You don't have permission to use this command.

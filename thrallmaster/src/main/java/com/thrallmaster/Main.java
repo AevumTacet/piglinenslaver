@@ -6,9 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.thrallmaster.IO.NBTExporter;
 import com.thrallmaster.Protocols.ThrallProtocol;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
-
 public class Main extends JavaPlugin {
 
    public static Main plugin;
@@ -20,7 +17,6 @@ public class Main extends JavaPlugin {
    @Override
    public void onLoad() {
       super.onLoad();
-      CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
       ThrallProtocol.onLoad(this);
    }
 
@@ -32,12 +28,16 @@ public class Main extends JavaPlugin {
 
       try {
          Settings.loadConfig(plugin);
-         CommandAPI.onEnable();
          ThrallManager.logger = getLogger();
 
          manager = new ThrallManager();
          manager.restorePlayers();
-         Commands.registerCommands(this);
+         
+         // Registrar el comando
+         Commands commands = new Commands();
+         this.getCommand("thrall").setExecutor(commands);
+         this.getCommand("thrall").setTabCompleter(commands);
+         
          this.getServer().getPluginManager().registerEvents(manager, this);
       } catch (Exception e) {
          hadError = true;
@@ -50,7 +50,6 @@ public class Main extends JavaPlugin {
    @Override
    public void onDisable() {
       super.onDisable();
-      CommandAPI.onDisable();
 
       if (!hadError) {
          getLogger().info("Saving Thrall NBT state.");
